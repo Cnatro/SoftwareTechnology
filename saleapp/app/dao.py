@@ -1,21 +1,10 @@
 import hashlib
 
+import cloudinary.uploader
+
 from app.models import Category,Product, User
-from app import app
-# def load_categories():
-#     return [{
-#         "id": 1,
-#         "name": "Mobile"
-#     },
-#         {
-#             "id": 2,
-#             "name": "Tablet"
-#         },
-#         {
-#             "id": 3,
-#             "name": "Laptop"
-#         }
-#     ]
+from app import app, db
+
 def load_categories():
     return Category.query.order_by('id').all()
 
@@ -50,6 +39,33 @@ def get_user_by_id(user_id):
     return User.query.get(user_id)
 
 
+def add_user(fullname,username,password,avatar=None):
+    password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
+    user = User(name=fullname, username=username, password= password, avatar = avatar)
+
+    # get avatar form cloud
+    if avatar :
+        res = cloudinary.uploader.upload(avatar)
+        user.avatar = res.get('secure_url')
+
+    db.session.add(user)
+    db.session.commit()
+
+
+# def load_categories():
+#     return [{
+#         "id": 1,
+#         "name": "Mobile"
+#     },
+#         {
+#             "id": 2,
+#             "name": "Tablet"
+#         },
+#         {
+#             "id": 3,
+#             "name": "Laptop"
+#         }
+#     ]
 # def load_products():
 #     return [{
 #         "id": 1,

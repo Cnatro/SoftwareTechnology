@@ -41,7 +41,7 @@ class Product(db.Model):
 
 if __name__ == '__main__':
     with app.app_context():
-        db.create_all()
+        # db.create_all()
 
         user1 = User(name="Admin", username='Admin', password=str(hashlib.md5('123456'.encode('utf-8')).hexdigest()))
         user2 = User(name="UserNormal", username='UserNormal', password=str(hashlib.md5('1234567'.encode('utf-8')).hexdigest()))

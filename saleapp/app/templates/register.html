@@ -1,0 +1,30 @@
+{% extends 'layout/base.html' %}
+
+{% block content %}
+<form action="/register" method="post" enctype="multipart/form-data">
+    {% if err_msg %}
+    <div class="alert alert-danger"> {{err_msg}}</div>
+    {% endif %}
+    <div class="mb-3 mt-3">
+        <label for="fullname" class="elform-lab">Fullname:</label>
+        <input type="text" class="form-control" id="fullname" placeholder="Enter Fullname" name="fullname"/>
+    </div>
+    <div class="mb-3 mt-3">
+        <label for="username" class="elform-lab">Username:</label>
+        <input type="text" class="form-control" id="username" placeholder="Enter Username" name="username"/>
+    </div>
+    <div class="mb-3">
+        <label for="pwd" class="form-label">Password:</label>
+        <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="password"/>
+    </div>
+    <div class="mb-3 mt-3">
+        <label for="confirm" class="elform-lab">Confirm:</label>
+        <input type="password" class="form-control" id="confirm" placeholder="Enter confirm" name="confirm"/>
+    </div>
+    <div class="mb-3 mt-3">
+        <label for="avatar" class="elform-lab">Avatar:</label>
+        <input type="file" class="form-control" id="avatar" name="avatar"/>
+    </div>
+    <button type="submit" class="btn btn-primary">Register</button>
+</form>
+{% endblock%}
