@@ -28,6 +28,8 @@ class Category(db.Model):
 
     products = relationship('Product', backref='Category', lazy=True)
 
+    def __str__(self):
+        return self.name
 
 class Product(db.Model):
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -43,7 +45,7 @@ if __name__ == '__main__':
     with app.app_context():
         # db.create_all()
 
-        user1 = User(name="Admin", username='Admin', password=str(hashlib.md5('123456'.encode('utf-8')).hexdigest()))
+        user1 = User(name="Admin", username='Admin', password=str(hashlib.md5('123456'.encode('utf-8')).hexdigest()),user_role=UserRole.ADMIN)
         user2 = User(name="UserNormal", username='UserNormal', password=str(hashlib.md5('1234567'.encode('utf-8')).hexdigest()))
         # db.session.add_all([user1, user2])
         # db.session.commit()

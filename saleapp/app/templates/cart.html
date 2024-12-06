@@ -1,0 +1,40 @@
+{% extends 'layout/base.html' %}
+
+{% block content %}
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Tên sản phẩm</th>
+        <th scope="col">Giá</th>
+        <th scope="col">Số lượng</th>
+        <th scope="col">Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% if 'cart' in session %}
+    {% for c in session['cart'].values() %}
+    <tr>
+        <th scope="row">{{ c.id }}</th>
+        <td>{{ c.name }}</td>
+        <td>{{"{:,.0f}".format(c.price)}} VND</td>
+        <td>
+            <input type="number" value="{{c.quantity }}"/>
+        </td>
+        <td>
+            <button class="btn btn-danger"> &times;   </button>
+        </td>
+    </tr>
+    {% endfor %}
+    {% else %}
+    <span class="alert alert-info">Không có dữ liệu</span>
+    {% endif %}
+
+    </tbody>
+</table>
+<div class="alert alert-info">
+    <h3>Tong so luong : <span>{{cart_stats.total_quantity}}</span></h3>
+    <h3>Tong so tien : <span>{{"{:,.0f}".format(cart_stats.total_prices)}} VND</span></h3>
+</div>
+<div class="btn btn-success"> Thanh toan</div>
+{% endblock %}
