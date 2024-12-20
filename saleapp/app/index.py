@@ -31,7 +31,8 @@ def login_process():
         user_login = dao.auth_user(username=username, password=password)
         if user_login:
             login_user(user_login)
-            return redirect('/')
+            next = request.args.get('next')
+            return redirect(next if next else '/')
 
     return render_template('login.html')
 
@@ -106,13 +107,49 @@ def add_to_cart():
             'quantity':1
         }
     session['cart'] = cart
-    print(cart)
+    # print(cart)
     return jsonify(utils.stats_cart(cart))
+
+
+@app.route('/api/carts/<product_id>',methods=['PUT'])
+def update_cart(product_id):
+    cart = session.get('cart')
+    if cart and product_id in cart:
+        quantity = int(request.json.get('quantity',0))
+        cart[product_id]['quantity'] = quantity
+    session['cart'] = cart
+
+    return jsonify(utils.stats_cart(cart))
+
+
+@app.route('/api/carts/<product_id>',methods=['DELETE'])
+def delete_cart(product_id):
+    cart = session.get('cart')
+    if cart and product_id in cart:
+        del cart[product_id]
+
+    session['cart'] = cart
+    return jsonify(utils.stats_cart(cart))
+
+
+@app.route('/api/pay',methods=['post'])
+def pay():
+    cart = session.get('cart')
+    dao.add_receipt(cart)
+    try:
+        # print(cart)
+        dao.add_receipt(cart)
+    except:
+        return jsonify({'status': 500})
+    else:
+        del session['cart']
+        return jsonify({'status': 200})
 
 
 @app.route('/carts')
 def carts():
     return render_template('cart.html')
+
 
 @app.context_processor
 def common_context_params():

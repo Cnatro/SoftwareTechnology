@@ -1,9 +1,9 @@
 import hashlib
-
 import cloudinary.uploader
-
-from app.models import Category,Product, User
+from app.models import Category,Product, User,Receipt,ReceiptDetails
 from app import app, db
+from flask_login import current_user
+from flask import session
 
 def load_categories():
     return Category.query.order_by('id').all()
@@ -54,6 +54,23 @@ def add_user(fullname,username,password,avatar=None):
     db.session.commit()
 
 
+def add_receipt(cart):
+    if cart:
+        r = Receipt(user=current_user)
+        db.session.add(r)
+
+        for c in cart:
+            d = ReceiptDetails(quantity=c['quantity']
+                               ,unit_price=c['price']
+                               ,receipt=r
+                               ,product_id=c['id'])
+            # print(d)
+            db.session.add(d)
+        # db.session.commit()
+
+
+# if __name__ == '__main__':
+#    # print(add_receipt(session.get('cart')))
 # def load_categories():
 #     return [{
 #         "id": 1,
